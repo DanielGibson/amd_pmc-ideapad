@@ -10,8 +10,16 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+#include <linux/version.h> // DG: to support different kernel versions
+
 #include <linux/acpi.h>
-#include <linux/array_size.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0)
+  #include <linux/array_size.h>
+#else
+  #include <linux/kernel.h>
+#endif
+
 #include <linux/bitfield.h>
 #include <linux/bits.h>
 #include <linux/debugfs.h>
@@ -28,7 +36,11 @@
 #include <linux/seq_file.h>
 #include <linux/uaccess.h>
 
-#include <asm/amd/node.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
+  #include <asm/amd/node.h>
+#else
+  #include <asm/amd_nb.h>
+#endif
 
 #include "pmc.h"
 
@@ -790,9 +802,13 @@ static int amd_pmc_probe(struct platform_device *pdev)
 		goto err_pci_dev_put;
 	}
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)
 	err = devm_mutex_init(dev->dev, &dev->lock);
 	if (err)
 		goto err_pci_dev_put;
+#else
+	mutex_init(&dev->lock);
+#endif
 
 	/* Get num of IP blocks within the SoC */
 	amd_pmc_get_ip_info(dev);
@@ -831,6 +847,9 @@ static void amd_pmc_remove(struct platform_device *pdev)
 	pci_dev_put(dev->rdev);
 	if (IS_ENABLED(CONFIG_AMD_MP2_STB))
 		amd_mp2_stb_deinit(dev);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
+	mutex_destroy(&dev->lock);
+#endif
 }
 
 static const struct acpi_device_id amd_pmc_acpi_ids[] = {
@@ -855,7 +874,11 @@ static struct platform_driver amd_pmc_driver = {
 		.pm = pm_sleep_ptr(&amd_pmc_pm),
 	},
 	.probe = amd_pmc_probe,
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)
 	.remove = amd_pmc_remove,
+#else
+	.remove_new = amd_pmc_remove,
+#endif
 };
 module_platform_driver(amd_pmc_driver);
 

@@ -11,7 +11,15 @@
 #include <linux/dmi.h>
 #include <linux/io.h>
 #include <linux/ioport.h>
-#include <linux/platform_data/x86/amd-fch.h>
+
+#include <linux/version.h> // DG: to support different kernel versions
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
+  #include <linux/platform_data/x86/amd-fch.h>
+#else
+  #define FCH_PM_BASE		0xFED80300
+  #define FCH_PM_SCRATCH	0x80
+#endif
 
 #include "pmc.h"
 
