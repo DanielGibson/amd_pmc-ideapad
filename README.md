@@ -42,7 +42,9 @@ See [below](#making-sure-it-works) for how to make sure all this actually worked
 #### ... manually
 
 Build it:  
-`$ make -C /lib/modules/`uname -r`/build M=$PWD`
+```
+$ make -C /lib/modules/`uname -r`/build M=$PWD
+```
 
 To test it without installing, you can do  
 `$ sudo rmmod amd-pmc`  
@@ -52,7 +54,9 @@ to load the freshly built module.
 *(See [below](#making-sure-it-works) for how to make sure it works)*
 
 To actually install this module for the current kernel, run  
-`$ sudo make -C /lib/modules/`uname -r`/build M=$PWD modules_install`
+```
+$ sudo make -C /lib/modules/`uname -r`/build M=$PWD modules_install
+```
 
 ### Making sure it works
 
