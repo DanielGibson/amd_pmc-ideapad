@@ -24,8 +24,8 @@ You'll need the headers for your currently running kernel installed and also a c
 #### ... with DKMS
 
 Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.1/, among other things):  
-`$ sudo dkms add path/to/amd_pmc/`  
-*(replace `path/to/amd_pmc/` with the path to the directory with the source)*
+`$ sudo dkms add path/to/amd_pmc-ideapad/`  
+*(replace `path/to/amd_pmc-ideapad/` with the path to the directory with the source)*
 
 Build a module for your currently running kernel:  
 `$ sudo dkms build amd_pmc/0.0.1`
@@ -57,6 +57,9 @@ To actually install this module for the current kernel, run
 ```
 $ sudo make -C /lib/modules/`uname -r`/build M=$PWD modules_install
 ```
+
+*Note:* I recommend using DKMS once you've successfully tested this, so the fixed module gets
+built and used automatically when the kernel is updated.
 
 ### Making sure it works
 
