@@ -104,7 +104,8 @@ MODULE_PARM_DESC(disable_workarounds, "Disable workarounds for platform bugs");
 static int delay_suspend = -1;
 module_param(delay_suspend, int, 0644);
 MODULE_PARM_DESC(delay_suspend,
-		 "Delays s2idle by 2.5 seconds to work around buggy ECs, often causing keyboard issues after suspend. 0: don't delay, 1: do delay, -1 (default): let amd_pmc decide. If you need this please report this to: platform-driver-x86@vger.kernel.org");
+		 "Delays s2idle by 2.5 seconds to work around buggy ECs, often causing keyboard issues after suspend. 0: don't delay, 1: do delay, -1 (default): let amd_pmc decide. If you need this please report this at https://github.com/DanielGibson/amd_pmc-ideapad/issues");
+//		 "Delays s2idle by 2.5 seconds to work around buggy ECs, often causing keyboard issues after suspend. 0: don't delay, 1: do delay, -1 (default): let amd_pmc decide. If you need this please report this to: platform-driver-x86@vger.kernel.org");
 
 static struct amd_pmc_dev pmc;
 
