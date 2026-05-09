@@ -105,7 +105,7 @@ MODULE_PARM_DESC(disable_workarounds, "Disable workarounds for platform bugs");
 static int delay_suspend = -1;
 module_param(delay_suspend, int, 0644);
 MODULE_PARM_DESC(delay_suspend,
-		 "Delays s2idle by 2.5 seconds to work around buggy ECs, often causing keyboard issues after suspend. 0: don't delay, 1: do delay, -1 (default): let amd_pmc decide. If you need this please report this to: platform-driver-x86@vger.kernel.org");
+		 "Delays s2idle by 2.5 seconds to work around buggy ECs, often causing keyboard issues after suspend. 0: don't delay, 1: do delay, -1 (default): let amd_pmc decide. If you need this please report this at https://github.com/DanielGibson/amd_pmc-ideapad/issues");
 
 static struct amd_pmc_dev pmc;
 
@@ -654,7 +654,7 @@ static bool amd_pmc_want_suspend_delay(struct amd_pmc_dev *pdev)
 		}
 		dev_info(pdev->dev, "Not delaying suspend because of module parameter, even though your device is assumed to need it!\n");
 	} else if (delay_suspend == 1) {
-		dev_info(pdev->dev, "Delaying suspend by 2.5s because delay_suspend=1. If this solves problems on your machine, please report this whole line to: platform-driver-x86@vger.kernel.org so it can be automatically detected as affected in the future. System Vendor: \"%s\" Product Name: \"%s\" Product Family: \"%s\" Board Vendor: \"%s\" Board Name: \"%s\"\n",
+		dev_info(pdev->dev, "Delaying suspend by 2.5s because delay_suspend=1. If this solves problems on your machine, please report this whole line at https://github.com/DanielGibson/amd_pmc-ideapad/issues so it can be automatically detected as affected in the future. System Vendor: \"%s\" Product Name: \"%s\" Product Family: \"%s\" Board Vendor: \"%s\" Board Name: \"%s\"\n",
 			 dmi_get_system_info(DMI_SYS_VENDOR),
 			 dmi_get_system_info(DMI_PRODUCT_NAME),
 			 dmi_get_system_info(DMI_PRODUCT_FAMILY),
