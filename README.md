@@ -23,15 +23,18 @@ You'll need the headers for your currently running kernel installed and also a c
 
 #### ... with DKMS
 
-Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.1/, among other things):  
+Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.2/, among other things):  
 `$ sudo dkms add path/to/amd_pmc-ideapad/`  
 *(replace `path/to/amd_pmc-ideapad/` with the path to the directory with the source)*
 
+**If you have installed version 0.0.1**, remove it now (if not, skip this command):  
+`$ sudo dkms remove amd_pmc/0.0.1 --all`
+
 Build a module for your currently running kernel:  
-`$ sudo dkms build amd_pmc/0.0.1`
+`$ sudo dkms build amd_pmc/0.0.2`
 
 Install the freshly built module:  
-`$ sudo dkms install amd_pmc/0.0.1`
+`$ sudo dkms install amd_pmc/0.0.2`
 
 Now you could either just reboot or unload the old module and load the new one, like:  
 `$ sudo rmmod amd-pmc`  
