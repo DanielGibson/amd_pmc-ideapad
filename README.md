@@ -14,6 +14,13 @@ I modified the source so it compiles with Linux Kernel 6.5 and newer.
 **Note:** I made sure it compiles with various kernel versions, but only tested the functionality
 with 6.18 and 7.0. Please let me know if it doesn't build or work on other versions (>= 6.5).
 
+Unfortunately, this **does not _completely_ fix the issues**.  
+Normal suspend and resume (with keyboard or lid switch or touchpad, ...) works
+fine, but timer-base resuming ("wakealarm", used by the amd-s2idle testprogram, for example)
+still has the old problems, at leat on my machine (16ABR8).  
+I think this shouldn't be a big problem in practice, but you should probably be
+aware of this.
+
 ### Building and installing
 
 First you need to get this project on your computer, either by cloning it with git or by
@@ -23,18 +30,19 @@ You'll need the headers for your currently running kernel installed and also a c
 
 #### ... with DKMS
 
-Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.2/, among other things):  
+Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.3/, among other things):  
 `$ sudo dkms add path/to/amd_pmc-ideapad/`  
 *(replace `path/to/amd_pmc-ideapad/` with the path to the directory with the source)*
 
-**If you have installed version 0.0.1**, remove it now (if not, skip this command):  
-`$ sudo dkms remove amd_pmc/0.0.1 --all`
+**If you have installed version 0.0.1** or 0.0.2, remove it now (if not, skip this command):  
+`$ sudo dkms remove amd_pmc/0.0.1 --all`  
+and/or `$ sudo dkms remove amd_pmc/0.0.2 --all`  
 
 Build a module for your currently running kernel:  
-`$ sudo dkms build amd_pmc/0.0.2`
+`$ sudo dkms build amd_pmc/0.0.3`
 
 Install the freshly built module:  
-`$ sudo dkms install amd_pmc/0.0.2`
+`$ sudo dkms install amd_pmc/0.0.3`
 
 Now you could either just reboot or unload the old module and load the new one, like:  
 `$ sudo rmmod amd-pmc`  
@@ -73,8 +81,8 @@ If that file actually exists, the patched module is loaded.
 
 If you have a Lenovo laptop and run  
 `sudo dmidecode -s system-product-name`  
-and it shows a name that either starts with "82X" (like "82XR") or "83K" (like "83K6"),
-the workaround will be used automatically.
+and it shows a name that is "83MM" or either starts with "82X" (like "82XR")
+or "83K" (like "83K6"), the workaround will be used automatically.
 
 If you have another laptop and want to try if this workaround helps there as well, you can enforce its
 usage with  
@@ -90,7 +98,10 @@ if your laptop was automatically detected as affected, or
 `[   65.812742] amd_pmc AMDI0005:00: Delaying suspend by 2.5s because delay_suspend=1`  
 if you enforced using it by setting the module parameter.
 
-If your laptop is affected and *not* automatically detected, please report that to me so I can add it.
+If your laptop is affected and *not* automatically detected, please report that
+to me so I can add it. Please post the whole `Delaying suspend for 2.5s because delay_suspend=1., If ...`
+line from `dmesg`, it contains information needed to identify your device in the
+quirks list.
 
 To **permanently enforce using it** (on laptops not automatically detected as affected), add a file
 `/etc/modprobe.d/my_amd_pmc.conf` with the following content:
