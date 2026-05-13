@@ -14,12 +14,22 @@ I modified the source so it compiles with Linux Kernel 6.5 and newer.
 **Note:** I made sure it compiles with various kernel versions, but only tested the functionality
 with 6.18 and 7.0. Please let me know if it doesn't build or work on other versions (>= 6.5).
 
-Unfortunately, this **does not _completely_ fix the issues**.  
+### Possibly remaining problems (with wakealarm)
+
+Unfortunately, this **does not _completely_ fix the issues** on *all* devices.
+
 Normal suspend and resume (with keyboard or lid switch or touchpad, ...) works
-fine, but timer-base resuming ("wakealarm", used by the amd-s2idle testprogram, for example)
-still has the old problems, at leat on my machine (16ABR8).  
+fine, but timer-base suspend+resume ("wakealarm", used by the `amd-s2idle` testprogram
+or `rtcwake`, for example) still has the old problems on some machines (like my 16ABR8),
+but apparently works fine on others (like [14ARP10](https://bugzilla.kernel.org/show_bug.cgi?id=221383#c66)).
+
 I think this shouldn't be a big problem in practice, but you should probably be
 aware of this.
+
+At least on 16ABR8 you can still use the `i8042.nopnp` kernel commandline parameter
+to keep *most* of the keyboard functional after a timed suspend - that will allow
+you to unlock your screensaver after resume, save your open files and then reboot
+to restore full keyboard and lid switch functionality.
 
 ### Building and installing
 
@@ -95,11 +105,11 @@ You can check in dmesg if this workaround was used.
 There will be a line like  
 `[   65.812742] amd_pmc AMDI0005:00: Delaying suspend by 2.5s to avoid platform bug`  
 if your laptop was automatically detected as affected, or  
-`[   65.812742] amd_pmc AMDI0005:00: Delaying suspend by 2.5s because delay_suspend=1`  
+`[   65.812742] amd_pmc AMDI0005:00: Delaying suspend by 2.5s because delay_suspend=1. If this solves problems on your machine, please report this whole line (...)`  
 if you enforced using it by setting the module parameter.
 
 If your laptop is affected and *not* automatically detected, please report that
-to me so I can add it. Please post the whole `Delaying suspend for 2.5s because delay_suspend=1., If ...`
+to me so I can add it. Please post the whole `Delaying suspend for 2.5s because delay_suspend=1. If (...)`
 line from `dmesg`, it contains information needed to identify your device in the
 quirks list.
 
