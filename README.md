@@ -7,8 +7,9 @@ Taken from v7.0 and patched to work around a bug on some Lenovo laptops, mostly 
 models with either Zen3 or Zen3+ CPU. That bug manifests as broken keyboard and lid switch
 after suspend+resume.
 
-See also https://lore.kernel.org/platform-driver-x86/20260501032655.283789-1-daniel@gibson.sh/T/
-and https://bugzilla.kernel.org/show_bug.cgi?id=221383
+See also [my blogpost about it](https://blog.gibson.sh/2026/06/03/ideapad-linux/) and the
+[issue in the kernel bugzilla](https://bugzilla.kernel.org/show_bug.cgi?id=221383) and the
+[pull request to get my fix upstream](https://lore.kernel.org/platform-driver-x86/20260512202645.1549111-1-daniel@gibson.sh/t/#u).
 
 I modified the source so it compiles with Linux Kernel 6.5 and newer.  
 **Note:** I made sure it compiles with various kernel versions, but only tested the functionality
