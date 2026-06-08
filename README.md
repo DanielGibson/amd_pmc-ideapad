@@ -1,5 +1,9 @@
 ## amd_pmc Kernel Module fixed for some IdeaPads and backported
 
+<a href="https://blog.gibson.sh/job/" title="Daniel is currently available for hire - click for details!"><picture>
+<img  align="right" width="90" height="100" alt="Hire Me!" src="https://dhewm3.org/hireme-180-shadow2.png" />
+</picture></a>
+
 This kernel module is a driver for the *AMD SoC Power Management Controller* and usually part of
 the Linux kernel, under drivers/platform/x86/amd/pmc/
 
@@ -9,7 +13,7 @@ after suspend+resume.
 
 See also [my blogpost about it](https://blog.gibson.sh/2026/06/03/ideapad-linux/) and the
 [issue in the kernel bugzilla](https://bugzilla.kernel.org/show_bug.cgi?id=221383) and the
-[pull request to get my fix upstream](https://lore.kernel.org/platform-driver-x86/20260512202645.1549111-1-daniel@gibson.sh/t/#u).
+[pull request to get my fix upstream](https://lore.kernel.org/platform-driver-x86/20260606044758.2213401-1-daniel@gibson.sh/T/#u).
 
 I modified the source so it compiles with Linux Kernel 6.5 and newer.  
 **Note:** I made sure it compiles with various kernel versions, but only tested the functionality
@@ -41,19 +45,19 @@ You'll need the headers for your currently running kernel installed and also a c
 
 #### ... with DKMS
 
-Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.3/, among other things):  
+Add it to dkms (will copy the source to /usr/src/amd_pmc-0.0.4/, among other things):  
 `$ sudo dkms add path/to/amd_pmc-ideapad/`  
 *(replace `path/to/amd_pmc-ideapad/` with the path to the directory with the source)*
 
-**If you have installed version 0.0.1** or 0.0.2, remove it now (if not, skip this command):  
-`$ sudo dkms remove amd_pmc/0.0.1 --all`  
-and/or `$ sudo dkms remove amd_pmc/0.0.2 --all`  
+**If you have installed an older version version** like 0.0.3, remove it now (if not, skip this command):  
+`$ sudo dkms remove amd_pmc/0.0.3 --all`  
+and/or the same with `amd_pmc/0.0.2` or `amd_pmc/0.0.1`
 
 Build a module for your currently running kernel:  
-`$ sudo dkms build amd_pmc/0.0.3`
+`$ sudo dkms build amd_pmc/0.0.4`
 
 Install the freshly built module:  
-`$ sudo dkms install amd_pmc/0.0.3`
+`$ sudo dkms install amd_pmc/0.0.4`
 
 Now you could either just reboot or unload the old module and load the new one, like:  
 `$ sudo rmmod amd-pmc`  
