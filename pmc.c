@@ -636,6 +636,49 @@ static int amd_pmc_wa_irq1(struct amd_pmc_dev *pdev)
 	return 0;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(7, 2, 0)
+// DG: copied the following function from drivers/rtc/interface.c
+// from commit 947d7ea6 (in 7.2 RC1)
+/**
+ * rtc_read_next_alarm - read the next expiring alarm
+ * @rtc: RTC device
+ * @alarm: storage for the alarm information
+ *
+ * Read the next expiring alarm from the RTC timerqueue. This returns
+ * the alarm that will actually fire next, which may be different from
+ * rtc_read_alarm() if multiple timers are queued (e.g., alarmtimer
+ * and wakealarm sysfs both active).
+ *
+ * Returns: 0 on success, -ENOENT if no alarm is pending, or other error.
+ */
+static int rtc_read_next_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+{
+        struct timerqueue_node *next;
+        int err;
+
+        if (!rtc || !alarm)
+                return -EINVAL;
+
+        err = mutex_lock_interruptible(&rtc->ops_lock);
+        if (err)
+                return err;
+
+        next = timerqueue_getnext(&rtc->timerqueue);
+        if (!next) {
+                err = -ENOENT;
+                goto unlock;
+        }
+
+        memset(alarm, 0, sizeof(struct rtc_wkalrm));
+        alarm->time = rtc_ktime_to_tm(next->expires);
+        alarm->enabled = 1;
+
+unlock:
+        mutex_unlock(&rtc->ops_lock);
+        return err;
+}
+#endif // < Linux 7.2
+
 static int amd_pmc_verify_czn_rtc(struct amd_pmc_dev *pdev, u32 *arg)
 {
 	struct rtc_device *rtc_device;
