@@ -1,9 +1,5 @@
 ## amd_pmc Kernel Module fixed for some IdeaPads and backported
 
-<a href="https://blog.gibson.sh/job/" title="Daniel is currently available for hire - click for details!"><picture>
-<img  align="right" width="90" height="100" alt="Hire Me!" src="https://dhewm3.org/hireme-180-shadow2.png" />
-</picture></a>
-
 This kernel module is a driver for the *AMD SoC Power Management Controller* and usually part of
 the Linux kernel, under drivers/platform/x86/amd/pmc/
 
@@ -14,6 +10,16 @@ after suspend+resume.
 See also [my blogpost about it](https://blog.gibson.sh/2026/06/03/ideapad-linux/) and the
 [issue in the kernel bugzilla](https://bugzilla.kernel.org/show_bug.cgi?id=221383) and the
 [pull request to get my fix upstream](https://lore.kernel.org/platform-driver-x86/20260606044758.2213401-1-daniel@gibson.sh/T/#u).
+
+---
+
+**Note:** This fix will be in *upstream kernel* 7.2 (already is in current RC) and is in the
+latest *stable* and *longterm* update releases (7.1.5, 6.18.41, 6.12.100, 6.6.147).
+
+I haven't checked if any distros have merged this yet into their kernels yet, I hope they will.
+If yours hasn't, just keep on using the module provided here :-)
+
+---
 
 I modified the source so it compiles with Linux Kernel 6.5 and newer.  
 **Note:** I made sure it compiles with various kernel versions, but only tested the functionality
